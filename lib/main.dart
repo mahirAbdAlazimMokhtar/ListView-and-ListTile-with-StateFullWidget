@@ -21,6 +21,7 @@ class RandomWords extends StatefulWidget {
 class _RandomWordsState extends State<RandomWords> {
   @override
   final List<WordPair> _suggestions = <WordPair>[];
+  final Set<WordPair> _saved = Set<WordPair>();
   Widget _buildSuggestions(){
     return ListView.builder(
       itemBuilder: (BuildContext _context ,  i){
@@ -38,8 +39,24 @@ class _RandomWordsState extends State<RandomWords> {
     );
   }
   Widget _buildRow(WordPair pair){
+    final bool alreadySaved = _saved.contains(pair);
     return ListTile(
+      hoverColor: Colors.purple.shade50,
+      focusColor: Colors.yellow,
       title: Text(pair.asCamelCase),
+      trailing: Icon(
+        alreadySaved ? Icons.favorite : Icons.favorite_border,
+        color: alreadySaved ? Colors.red : null,
+      ),
+      onTap: (){
+        setState(() {
+          if (alreadySaved){
+            _saved.remove(pair);
+          } else {
+            _saved.add(pair);
+          }
+        });
+      },
     );
   }
 
